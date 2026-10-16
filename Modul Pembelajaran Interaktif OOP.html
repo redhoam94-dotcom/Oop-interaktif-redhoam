@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering OOP - Learning Module Interaktif</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @keyframes drive {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+            100% { transform: translateX(0); }
+        }
+        .animate-drive {
+            animation: drive 0.6s ease-in-out infinite;
+        }
+        @keyframes pulse-light {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+        .animate-glow {
+            animation: pulse-light 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/20 text-white font-bold text-xl">
+                    <i class="fa-solid font-mono">&lt;/&gt;</i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-500 bg-clip-text text-transparent">OOP Interactive Lab</h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Pemrograman Berbasis Objek Bahasa Indonesia</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex items-center gap-1 sm:gap-2 bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+                <button onclick="switchTab('theory')" id="nav-theory" class="nav-btn px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-all flex items-center gap-2 text-white bg-brand-600 shadow">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Teori</span>
+                </button>
+                <button onclick="switchTab('playground')" id="nav-playground" class="nav-btn px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-700/50">
+                    <i class="fa-solid fa-flask"></i>
+                    <span>Simulasi Visual</span>
+                </button>
+                <button onclick="switchTab('code')" id="nav-code" class="nav-btn px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-700/50">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Kode</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-all flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-700/50">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Kuis</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= TAB 1: TEORI ================= -->
+        <section id="tab-theory" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-900 via-indigo-900 to-slate-900 border border-slate-800 p-8 sm:p-10">
+                <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-500 border border-brand-500/20">
+                        <i class="fa-solid fa-sparkles"></i> Modul Pembelajaran Interaktif
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                        Menguasai Object-Oriented Programming (OOP)
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        OOP adalah paradigma pemrograman yang berorientasi pada <strong>objek</strong>. Semua elemen dalam program dibungkus ke dalam objek yang memiliki <strong>Atribut (State)</strong> dan <strong>Method (Behavior)</strong> seperti dunia nyata.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('playground')" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold px-5 py-2.5 rounded-xl shadow-lg shadow-brand-600/30 transition-all flex items-center gap-2 text-sm">
+                            Coba Simulasi <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onclick="switchTab('quiz')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-5 py-2.5 rounded-xl transition-all text-sm">
+                            Uji Pemahaman
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Principles Grid -->
+            <div>
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-brand-500"></i> 5 Pilar Utama OOP
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Card 1: Class & Object -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 hover:border-brand-500/50 transition-all group flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-cube"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">1. Class & Object</h4>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                                <strong class="text-blue-400">Class</strong> adalah cetak biru (blueprint) atau template. 
+                                <strong class="text-blue-400">Object</strong> adalah wujud nyata (instance) yang dibuat dari Class tersebut.
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300">
+                            <span class="text-brand-400 font-semibold block mb-1">💡 Analogi Dunia Nyata:</span>
+                            Class = Denah Cetak Biru Mobil.<br>
+                            Object = Mobil Merah buatan pabrik dengan plat nomor B 1234 CD.
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Encapsulation -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 hover:border-emerald-500/50 transition-all group flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">2. Encapsulation</h4>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                                Pembungkusan variabel (data) dan method di dalam satu unit kelas, serta membatasi akses langsung dari luar menggunakan <strong>Access Modifiers</strong> (<code class="text-emerald-400">private</code>, <code class="text-emerald-400">public</code>, <code class="text-emerald-400">protected</code>).
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300">
+                            <span class="text-emerald-400 font-semibold block mb-1">💡 Analogi Dunia Nyata:</span>
+                            Kapsul Obat membungkus racikan bahan kimia di dalamnya. Anda hanya minum kapsulnya tanpa menyentuh serbuk kimianya secara langsung.
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Inheritance -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 hover:border-purple-500/50 transition-all group flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-sitemap"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">3. Inheritance</h4>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                                Kemampuan kelas anak (<strong>Child Class</strong>) untuk mewarisi sifat, atribut, dan method dari kelas induk (<strong>Parent Class</strong>), sehingga mencegah duplikasi kode.
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300">
+                            <span class="text-purple-400 font-semibold block mb-1">💡 Analogi Dunia Nyata:</span>
+                            Anak mewarisi warna mata atau jenis rambut dari Orang Tua, namun sang anak juga memiliki keahlian uniknya sendiri.
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Polymorphism -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 hover:border-amber-500/50 transition-all group flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-shapes"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">4. Polymorphism</h4>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                                Berarti "banyak bentuk". Konsep di mana satu method yang sama dapat memiliki perilaku / hasil tindakan yang berbeda tergantung pada objek yang memanggilnya (Overriding & Overloading).
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300">
+                            <span class="text-amber-400 font-semibold block mb-1">💡 Analogi Dunia Nyata:</span>
+                            Perintah "Bersuara()". Kucing merespons dengan "Meow", Anjing dengan "Guk guk", dan Burung dengan "Cicit".
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Abstraction -->
+                    <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-6 hover:border-rose-500/50 transition-all group flex flex-col justify-between lg:col-span-2">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">5. Abstraction</h4>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                                Menyembunyikan detail kerumitan internal proses dan hanya menampilkan fungsi-fungsi penting kepada pengguna akhir. Pengguna fokus pada <strong>apa yang dilakukan</strong> objek, bukan <strong>bagaimana cara kerjanya</strong> secara teknis internal.
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300">
+                            <span class="text-rose-400 font-semibold block mb-1">💡 Analogi Dunia Nyata:</span>
+                            Saat menginjak pedal gas mobil, Anda tahu mobil akan maju. Anda tidak perlu memikirkan bagaimana campuran bahan bakar dan pembakaran piston bekerja secara terperinci di dalam mesin.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: VISUAL SIMULATION / PLAYGROUND ================= -->
+        <section id="tab-playground" class="tab-content hidden space-y-8">
+
+            <div class="flex flex-col md:flex-row gap-4 items-start justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-flask text-brand-500"></i> Interactive OOP Laboratory
+                    </h2>
+                    <p class="text-sm text-slate-400">Uji coba pembuatan Instansiasi Objek, Pengaturan Atribut, dan Method secara Real-Time.</p>
+                </div>
+            </div>
+
+            <!-- Playground Layout: Form Instantiation vs Live Canvas -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Class Blueprint & Form Creator (4 cols) -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                        <h3 class="text-md font-bold text-white mb-4 flex items-center gap-2 border-b border-slate-700 pb-3">
+                            <i class="fa-solid fa-microchip text-brand-400"></i> Construct Object (`new`)
+                        </h3>
+
+                        <form id="car-form" onsubmit="createNewObject(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Nama Objek (Instance Name)</label>
+                                <input type="text" id="input-name" value="mobilSaya" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors font-mono">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Merek / Nama Model</label>
+                                <input type="text" id="input-brand" value="Tesla Model 3" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Tipe Kendaraan</label>
+                                    <select id="input-type" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors">
+                                        <option value="Sedan">Sedan</option>
+                                        <option value="SUV">SUV</option>
+                                        <option value="Sport">Sport</option>
+                                        <option value="Truk">Truk EV</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-1">Warna Bodi</label>
+                                    <div class="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-xl px-2 py-1">
+                                        <input type="color" id="input-color" value="#3b82f6" class="w-8 h-7 bg-transparent cursor-pointer rounded">
+                                        <span id="color-hex" class="text-xs text-slate-400 font-mono">#3b82f6</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Kecepatan Maksimum (km/h)</label>
+                                <input type="number" id="input-maxspeed" min="80" max="350" value="200" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors">
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-solid fa-plus-circle"></i> Instansiasi Objek Baru
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Encapsulation Inspector Card -->
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-emerald-400"></i> Encapsulation State
+                        </h4>
+                        <div class="space-y-2 font-mono text-xs">
+                            <div class="flex justify-between p-2 bg-slate-900/60 rounded-lg">
+                                <span class="text-emerald-400">private #kecepatan:</span>
+                                <span id="encap-speed" class="text-white font-bold">0 km/h</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900/60 rounded-lg">
+                                <span class="text-emerald-400">private #isEngineOn:</span>
+                                <span id="encap-engine" class="text-rose-400 font-bold">false</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-2 font-sans italic">
+                                *Atribut di atas bersifat private. Anda hanya dapat mengubahnya melalui Method Setter/Getter (Akselerasi/Rem).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Stage & Method Controls (8 cols) -->
+                <div class="lg:col-span-8 space-y-6">
+
+                    <!-- Visual Car Stage Canvas -->
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[340px]">
+                        
+                        <!-- Top Header Info -->
+                        <div class="flex items-center justify-between z-10 border-b border-slate-700/60 pb-3">
+                            <div>
+                                <span id="current-obj-tag" class="font-mono text-xs text-brand-400 bg-brand-500/10 px-2.5 py-1 rounded-md border border-brand-500/20">mobilSaya = new Mobil()</span>
+                                <h3 id="display-obj-name" class="text-xl font-extrabold text-white mt-1">Tesla Model 3</h3>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-slate-400 block">Status Mesin</span>
+                                <span id="status-engine-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                    <span class="w-2 h-2 rounded-full bg-rose-500"></span> Mati
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Animated Track & Vehicle -->
+                        <div class="my-8 relative h-36 bg-slate-950/70 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center p-4">
+                            <!-- Track Line -->
+                            <div class="absolute w-full border-b-2 border-dashed border-slate-700 top-1/2"></div>
+                            
+                            <!-- Vehicle Representation -->
+                            <div id="vehicle-graphic" class="relative z-10 transition-all duration-300 flex flex-col items-center">
+                                <!-- Speed Gauge Float -->
+                                <div id="speed-bubble" class="mb-2 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-xs font-mono font-bold text-brand-400 shadow-md">
+                                    0 km/h
+                                </div>
+                                
+                                <!-- Vehicle Icon/Body -->
+                                <div id="car-body" class="p-4 rounded-2xl transition-all duration-300 shadow-xl flex items-center justify-center text-5xl" style="color: #3b82f6;">
+                                    <i id="vehicle-icon" class="fa-solid fa-car"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Method Action Control Panel -->
+                        <div class="z-10 bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+                            <span class="text-xs font-semibold text-slate-400 block mb-3 uppercase tracking-wider">Panggil Method (Invoke Actions):</span>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <button onclick="invokeMethod('start')" class="px-3 py-2.5 bg-slate-800 hover:bg-emerald-600/20 hover:border-emerald-500 border border-slate-700 rounded-xl text-xs font-bold text-emerald-400 transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-power-off"></i> Start Engine
+                                </button>
+                                <button onclick="invokeMethod('accelerate')" class="px-3 py-2.5 bg-slate-800 hover:bg-brand-600/20 hover:border-brand-500 border border-slate-700 rounded-xl text-xs font-bold text-brand-400 transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-gauge-high"></i> Akselerasi (+20)
+                                </button>
+                                <button onclick="invokeMethod('brake')" class="px-3 py-2.5 bg-slate-800 hover:bg-amber-600/20 hover:border-amber-500 border border-slate-700 rounded-xl text-xs font-bold text-amber-400 transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-hand-paper"></i> Injak Rem (-20)
+                                </button>
+                                <button onclick="invokeMethod('horn')" class="px-3 py-2.5 bg-slate-800 hover:bg-purple-600/20 hover:border-purple-500 border border-slate-700 rounded-xl text-xs font-bold text-purple-400 transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-bullhorn"></i> Klakson ()
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Console Logs Terminal -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 font-mono text-xs">
+                        <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-slate-500">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-terminal"></i> Console Output Log</span>
+                            <button onclick="clearConsole()" class="hover:text-slate-300 text-[10px]">Clear Log</button>
+                        </div>
+                        <div id="console-output" class="space-y-1.5 h-28 overflow-y-auto custom-scrollbar text-slate-300">
+                            <p class="text-slate-500">// Terminal siap. Buat objek baru atau jalankan method...</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Inheritance & Polymorphism Visual Diagram -->
+            <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6">
+                <h3 class="text-md font-bold text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-sitemap text-purple-400"></i> Visualisasi Class Inheritance & Polymorphism
+                </h3>
+                <p class="text-xs text-slate-400 mb-6">Lihat bagaimana Child Class mewarisi atribut dari Super Class dan melakukan Overriding Method.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                    
+                    <!-- Parent Class -->
+                    <div class="bg-slate-900/90 border-2 border-brand-500/50 rounded-xl p-4 relative">
+                        <span class="absolute -top-3 left-4 bg-brand-500 text-slate-900 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">Parent Class</span>
+                        <h4 class="font-mono font-bold text-brand-400 text-sm mt-1">class Kendaraan</h4>
+                        <div class="mt-3 text-xs font-mono space-y-1 text-slate-300 border-t border-slate-800 pt-2">
+                            <p class="text-slate-400">+ String merek</p>
+                            <p class="text-slate-400">+ int kecepatan</p>
+                            <p class="text-emerald-400">+ jalankanEngine()</p>
+                            <p class="text-amber-400">+ bunyikanKlakson()</p>
+                        </div>
+                    </div>
+
+                    <!-- Child 1 -->
+                    <div class="bg-slate-900/90 border border-purple-500/50 rounded-xl p-4 relative">
+                        <span class="absolute -top-3 left-4 bg-purple-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Child Class 1</span>
+                        <h4 class="font-mono font-bold text-purple-400 text-sm mt-1">class MobilSedan extends Kendaraan</h4>
+                        <div class="mt-3 text-xs font-mono space-y-1 text-slate-300 border-t border-slate-800 pt-2">
+                            <p class="text-slate-500 italic">// Warisi merek & kecepatan</p>
+                            <p class="text-purple-300">+ int kapasitasBagasi</p>
+                            <p class="text-amber-400 font-semibold">+ bunyikanKlakson() <span class="text-[10px] text-amber-500">(Override: "Bip Bip!")</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Child 2 -->
+                    <div class="bg-slate-900/90 border border-indigo-500/50 rounded-xl p-4 relative">
+                        <span class="absolute -top-3 left-4 bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Child Class 2</span>
+                        <h4 class="font-mono font-bold text-indigo-400 text-sm mt-1">class Truk EV extends Kendaraan</h4>
+                        <div class="mt-3 text-xs font-mono space-y-1 text-slate-300 border-t border-slate-800 pt-2">
+                            <p class="text-slate-500 italic">// Warisi merek & kecepatan</p>
+                            <p class="text-indigo-300">+ float muatanMaksTon</p>
+                            <p class="text-amber-400 font-semibold">+ bunyikanKlakson() <span class="text-[10px] text-amber-500">(Override: "HONK HONK!")</span></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 3: KODE DEMO ================= -->
+        <section id="tab-code" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-code text-brand-500"></i> Contoh Implementasi Kode
+                    </h2>
+                    <p class="text-sm text-slate-400">Pelajari penerapan struktur sintaks OOP dalam berbagai bahasa populer.</p>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="flex items-center gap-2 bg-slate-800 p-1 rounded-xl border border-slate-700">
+                    <button onclick="changeLang('js')" id="lang-js" class="lang-btn text-xs font-mono font-bold px-3 py-1.5 rounded-lg bg-brand-600 text-white">JavaScript</button>
+                    <button onclick="changeLang('python')" id="lang-python" class="lang-btn text-xs font-mono font-bold px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">Python</button>
+                    <button onclick="changeLang('java')" id="lang-java" class="lang-btn text-xs font-mono font-bold px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">Java</button>
+                </div>
+            </div>
+
+            <!-- Code Window Container -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+                <!-- Top Toolbar -->
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                        <span id="code-filename" class="ml-2 font-mono text-xs text-slate-400">Mobil.js</span>
+                    </div>
+                    <button onclick="copyCode()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Salin Kode
+                    </button>
+                </div>
+
+                <!-- Syntax Highlighted Code View -->
+                <pre class="p-6 text-xs sm:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed custom-scrollbar"><code id="code-display">
+// Loading snippet...
+                </code></pre>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: KUIS INTERAKTIF ================= -->
+        <section id="tab-quiz" class="tab-content hidden space-y-8">
+            <div class="max-w-3xl mx-auto space-y-6">
+                
+                <!-- Quiz Header -->
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 text-center space-y-2">
+                    <h2 class="text-2xl font-bold text-white flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-brand-500"></i> Evaluasi Pemahaman OOP
+                    </h2>
+                    <p class="text-sm text-slate-400">Jawab pertanyaan berikut untuk menguji pemahaman konsep dasar OOP Anda.</p>
+                </div>
+
+                <!-- Quiz Card Container -->
+                <div id="quiz-container" class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 sm:p-8 space-y-6">
+                    
+                    <!-- Progress Bar -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs text-slate-400 font-medium">
+                            <span id="quiz-progress-text">Soal 1 dari 5</span>
+                            <span id="quiz-score-live">Skor Saat Ini: 0</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div id="quiz-progress-bar" class="h-full bg-brand-500 transition-all duration-300" style="width: 20%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Text -->
+                    <div class="pt-2">
+                        <h3 id="quiz-question" class="text-base sm:text-lg font-bold text-white leading-snug">
+                            Loading pertanyaan...
+                        </h3>
+                    </div>
+
+                    <!-- Options -->
+                    <div id="quiz-options" class="space-y-3">
+                        <!-- Dynamic options here -->
+                    </div>
+
+                    <!-- Answer Feedback Box -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl border text-xs sm:text-sm leading-relaxed">
+                        <!-- Dynamic Feedback -->
+                    </div>
+
+                    <!-- Action Footer -->
+                    <div class="flex justify-end border-t border-slate-700/60 pt-4">
+                        <button id="next-btn" onclick="nextQuestion()" disabled class="bg-brand-600 hover:bg-brand-500 disabled:opacity-50 disabled:hover:bg-brand-600 text-white font-semibold px-6 py-2.5 rounded-xl transition-all text-sm flex items-center gap-2">
+                            Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Quiz Result Badge View (Hidden by default) -->
+                <div id="quiz-result" class="hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-8 text-center space-y-6">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-4xl text-slate-900 shadow-xl shadow-amber-500/20">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-extrabold text-white">Selamat! Kuis Selesai</h3>
+                        <p class="text-slate-300 text-sm">Anda telah menyelesaikan evaluasi pembelajaran OOP.</p>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 max-w-sm mx-auto space-y-3">
+                        <div class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Skor Akhir Anda</div>
+                        <div id="final-score" class="text-4xl font-extrabold text-brand-400">100 / 100</div>
+                        <div id="badge-title" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-brand-500/20 text-brand-400 border border-brand-500/30">
+                            Master OOP Level 1
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-center gap-4">
+                        <button onclick="restartQuiz()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-2.5 rounded-xl transition-all text-sm">
+                            Coba Lagi <i class="fa-solid fa-rotate-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-500">
+        <p>Modul Pembelajaran Interaktif Object-Oriented Programming (OOP) &bull; Dibuat untuk Efisiensi Belajar Coding</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // ================= TAB NAVIGATION =================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'bg-brand-600', 'shadow');
+                btn.classList.add('text-slate-400', 'hover:text-white');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.add('text-white', 'bg-brand-600', 'shadow');
+            activeBtn.classList.remove('text-slate-400', 'hover:text-white');
+        }
+
+        // Color Hex Sync
+        document.getElementById('input-color')?.addEventListener('input', (e) => {
+            document.getElementById('color-hex').innerText = e.target.value;
+        });
+
+        // ================= OOP PLAYGROUND ENGINE =================
+        // Class Definition in JS
+        class Mobil {
+            #kecepatan = 0; // Private Encapsulated Variable
+            #isEngineOn = false;
+
+            constructor(nama, merek, tipe, warna, maxSpeed) {
+                this.namaObjek = nama;
+                this.merek = merek;
+                this.tipe = tipe;
+                this.warna = warna;
+                this.maxSpeed = parseInt(maxSpeed);
+            }
+
+            // Public Methods / Interface
+            startEngine() {
+                if (this.#isEngineOn) {
+                    return { success: false, msg: `Mesin ${this.merek} sudah menyala!` };
+                }
+                this.#isEngineOn = true;
+                return { success: true, msg: `Mesin ${this.merek} berhasil dinyalakan! (vroom...)` };
+            }
+
+            accelerate() {
+                if (!this.#isEngineOn) {
+                    return { success: false, msg: `Gagal! Nyalakan mesin ${this.merek} terlebih dahulu!` };
+                }
+                if (this.#kecepatan + 20 > this.maxSpeed) {
+                    this.#kecepatan = this.maxSpeed;
+                    return { success: true, msg: `Mencapai kecepatan maksimum ${this.maxSpeed} km/h!` };
+                }
+                this.#kecepatan += 20;
+                return { success: true, msg: `Akselerasi! Kecepatan saat ini: ${this.#kecepatan} km/h.` };
+            }
+
+            brake() {
+                if (this.#kecepatan <= 0) {
+                    this.#kecepatan = 0;
+                    return { success: false, msg: `Mobil sudah berhenti sempurna (0 km/h).` };
+                }
+                this.#kecepatan = Math.max(0, this.#kecepatan - 20);
+                return { success: true, msg: `Mengerem. Kecepatan berkurang menjadi: ${this.#kecepatan} km/h.` };
+            }
+
+            horn() {
+                return { success: true, msg: `${this.merek} membunyikan klakson: "BIP BIP! HOOONK!" 📢` };
+            }
+
+            // Getters for Private Variables
+            getKecepatan() { return this.#kecepatan; }
+            getEngineStatus() { return this.#isEngineOn; }
+        }
+
+        // Global Active Object Instance
+        let currentVehicleObj = new Mobil('mobilSaya', 'Tesla Model 3', 'Sedan', '#3b82f6', 200);
+
+        function createNewObject(e) {
+            e.preventDefault();
+            const nama = document.getElementById('input-name').value.trim() || 'mobilSaya';
+            const merek = document.getElementById('input-brand').value.trim() || 'Mobil Baru';
+            const tipe = document.getElementById('input-type').value;
+            const warna = document.getElementById('input-color').value;
+            const maxSpeed = document.getElementById('input-maxspeed').value;
+
+            // Instantiate Object
+            currentVehicleObj = new Mobil(nama, merek, tipe, warna, maxSpeed);
+
+            // Update UI
+            updatePlaygroundUI();
+            logConsole(`Instansiasi Objek Baru Berhasil: const ${nama} = new Mobil("${merek}", "${tipe}");`, 'info');
+            showToast('Objek baru berhasil dibuat!');
+        }
+
+        function invokeMethod(action) {
+            let res;
+            switch(action) {
+                case 'start':
+                    res = currentVehicleObj.startEngine();
+                    break;
+                case 'accelerate':
+                    res = currentVehicleObj.accelerate();
+                    break;
+                case 'brake':
+                    res = currentVehicleObj.brake();
+                    break;
+                case 'horn':
+                    res = currentVehicleObj.horn();
+                    break;
+            }
+
+            // Log output to Console & UI
+            logConsole(`${currentVehicleObj.namaObjek}.${action}() -> ${res.msg}`, res.success ? 'success' : 'warn');
+            updatePlaygroundUI();
+
+            // Trigger Animation Effects
+            if (action === 'accelerate' && res.success) {
+                const graphic = document.getElementById('vehicle-graphic');
+                graphic.classList.add('animate-drive');
+                setTimeout(() => graphic.classList.remove('animate-drive'), 600);
+            }
+        }
+
+        function updatePlaygroundUI() {
+            // Object Header Tag
+            document.getElementById('current-obj-tag').innerText = `${currentVehicleObj.namaObjek} = new Mobil()`;
+            document.getElementById('display-obj-name').innerText = `${currentVehicleObj.merek} (${currentVehicleObj.tipe})`;
+
+            // Color & Icon Visual
+            const carBody = document.getElementById('car-body');
+            carBody.style.color = currentVehicleObj.warna;
+
+            const iconEl = document.getElementById('vehicle-icon');
+            if (currentVehicleObj.tipe === 'Truk') {
+                iconEl.className = 'fa-solid fa-truck-pickup';
+            } else if (currentVehicleObj.tipe === 'SUV') {
+                iconEl.className = 'fa-solid fa-truck-monster';
+            } else {
+                iconEl.className = 'fa-solid fa-car';
+            }
+
+            // Engine Status Badge
+            const engineBadge = document.getElementById('status-engine-badge');
+            const isEngineOn = currentVehicleObj.getEngineStatus();
+            if (isEngineOn) {
+                engineBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                engineBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Menyala`;
+            } else {
+                engineBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                engineBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Mati`;
+            }
+
+            // Speedometer & Encapsulation Private States
+            const speed = currentVehicleObj.getKecepatan();
+            document.getElementById('speed-bubble').innerText = `${speed} km/h`;
+            document.getElementById('encap-speed').innerText = `${speed} km/h`;
+            document.getElementById('encap-engine').innerText = isEngineOn ? 'true' : 'false';
+            document.getElementById('encap-engine').className = isEngineOn ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+        }
+
+        function logConsole(msg, type = 'info') {
+            const consoleBox = document.getElementById('console-output');
+            const p = document.createElement('p');
+            const timestamp = new Date().toLocaleTimeString();
+
+            if (type === 'success') p.className = 'text-emerald-400';
+            else if (type === 'warn') p.className = 'text-amber-400';
+            else if (type === 'info') p.className = 'text-brand-400';
+            else p.className = 'text-slate-300';
+
+            p.innerText = `[${timestamp}] ${msg}`;
+            consoleBox.appendChild(p);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = `<p class="text-slate-500">// Terminal dibersihkan...</p>`;
+        }
+
+        // ================= CODE SNIPPETS =================
+        const snippets = {
+            js: `// OOP dalam JavaScript (ES6)
+class Kendaraan {
+    #kecepatan = 0; // Private Field (Encapsulation)
+
+    constructor(merek) {
+        this.merek = merek;
+    }
+
+    startEngine() {
+        console.log(\`Mesin \${this.merek} menyala.\`);
+    }
+}
+
+// Inheritance (Pewarisan)
+class MobilSedan extends Kendaraan {
+    constructor(merek, bagasiKap) {
+        super(merek); // Panggil constructor Parent
+        this.bagasiKap = bagasiKap;
+    }
+
+    // Polymorphism (Method Overriding)
+    startEngine() {
+        console.log(\`[Sedan \${this.merek}] Mesin halus dihidupkan.\`);
+    }
+}
+
+const sedan = new MobilSedan("Toyota Camry", "500 Liters");
+sedan.startEngine(); // Output: [Sedan Toyota Camry] Mesin halus dihidupkan.`,
+
+            python: `# OOP dalam Python
+class Kendaraan:
+    def __init__(self, merek):
+        self.merek = merek
+        self.__kecepatan = 0  # Private Attribute (__ prefix)
+
+    def start_engine(self):
+        print(f"Mesin {self.merek} menyala.")
+
+# Inheritance
+class MobilSedan(Kendaraan):
+    def __init__(self, merek, bagasi_kap):
+        super().__init__(merek)
+        self.bagasi_kap = bagasi_kap
+
+    # Polymorphism
+    def start_engine(self):
+        print(f"[Sedan {self.merek}] Mesin halus dihidupkan.")
+
+sedan = MobilSedan("Honda Civic", "450 Liters")
+sedan.start_engine()`,
+
+            java: `// OOP dalam Java
+class Kendaraan {
+    protected String merek;
+    private int kecepatan = 0; // Private (Encapsulation)
+
+    public Kendaraan(String merek) {
+        this.merek = merek;
+    }
+
+    public void startEngine() {
+        System.out.println("Mesin " + merek + " menyala.");
+    }
+}
+
+// Inheritance
+class MobilSedan extends Kendaraan {
+    private int bagasiKap;
+
+    public MobilSedan(String merek, int bagasiKap) {
+        super(merek);
+        this.bagasiKap = bagasiKap;
+    }
+
+    // Polymorphism (Method Overriding)
+    @Override
+    public void startEngine() {
+        System.out.println("[Sedan " + merek + "] Mesin halus dihidupkan.");
+    }
+}`
+        };
+
+        function changeLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('bg-brand-600', 'text-white');
+            document.getElementById(`lang-${lang}`).classList.remove('text-slate-400');
+
+            const filenameMap = { js: 'Mobil.js', python: 'mobil.py', java: 'Mobil.java' };
+            document.getElementById('code-filename').innerText = filenameMap[lang];
+            document.getElementById('code-display').innerText = snippets[lang];
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('code-display').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('Kode berhasil disalin ke clipboard!');
+        }
+
+        // ================= QUIZ ENGINE =================
+        const quizData = [
+            {
+                question: "1. Manakah dari konsep OOP berikut yang berfungsi sebagai blueprint/cetak biru untuk membuat objek?",
+                options: ["Object", "Class", "Method", "Variable"],
+                answer: 1,
+                explanation: "Benar! Class adalah blueprint/cetak biru yang mendefinisikan atribut dan method. Objek adalah hasil instansiasi nyata dari class tersebut."
+            },
+            {
+                question: "2. Konsep pembungkusan data dan penyembunyian variabel private dari akses langsung luar dinamakan...",
+                options: ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction"],
+                answer: 2,
+                explanation: "Benar! Encapsulation membungkus data dan membatasinya melalui Access Modifiers seperti private."
+            },
+            {
+                question: "3. Keyword apa yang umumnya digunakan dalam kode untuk mewarisi sifat dari Parent Class ke Child Class?",
+                options: ["implements", "extends / super()", "override", "import"],
+                answer: 1,
+                explanation: "Benar! Inhetritance memanfaatkan keyword seperti 'extends' (Java/JS) atau 'super()' untuk memanggil parent class."
+            },
+            {
+                question: "4. Apa yang dimaksud dengan Polymorphism dalam OOP?",
+                options: [
+                    "Satu method yang memiliki banyak bentuk / perilaku berbeda",
+                    "Proses menghapus variabel private",
+                    "Membuat banyak class dalam satu file",
+                    "Proses mengulangi loop"
+                ],
+                answer: 0,
+                explanation: "Benar! Polymorphism berartikan 'banyak bentuk', di mana child class dapat meredefinisi (override) fungsi method dari parent class."
+            },
+            {
+                question: "5. Apa fungsi utama dari Abstraction?",
+                options: [
+                    "Menampilkan semua baris kode ke layar",
+                    "Menyembunyikan detail kerumitan internal dan hanya menampilkan fungsi penting",
+                    "Mencegah objek dibuat",
+                    "Membuat program berjalan lebih lambat"
+                ],
+                answer: 1,
+                explanation: "Benar! Abstraction menyembunyikan detail kompleksitas mekanisme internal sehingga pengguna fokus pada fungsi utamanya saja."
+            }
+        ];
+
+        let currentQIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        function loadQuestion() {
+            const q = quizData[currentQIndex];
+            document.getElementById('quiz-question').innerText = q.question;
+            document.getElementById('quiz-progress-text').innerText = `Soal ${currentQIndex + 1} dari ${quizData.length}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQIndex + 1) / quizData.length) * 100}%`;
+            document.getElementById('quiz-score-live').innerText = `Skor Saat Ini: ${score}`;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl bg-slate-900/80 border border-slate-700/80 hover:border-brand-500 text-xs sm:text-sm text-slate-200 transition-all flex items-center justify-between font-medium";
+                btn.innerHTML = `<span>${opt}</span> <i class="fa-regular fa-circle text-slate-500"></i>`;
+                btn.onclick = () => selectOption(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('next-btn').disabled = true;
+            selectedOption = null;
+        }
+
+        function selectOption(index, element) {
+            if (selectedOption !== null) return; // Prevent changing after pick
+            selectedOption = index;
+
+            const q = quizData[currentQIndex];
+            const isCorrect = (index === q.answer);
+
+            // Highlight chosen button
+            const allBtns = document.getElementById('quiz-options').children;
+            if (isCorrect) {
+                element.className = "w-full text-left p-3.5 rounded-xl bg-emerald-500/10 border-2 border-emerald-500 text-xs sm:text-sm text-emerald-300 font-medium flex items-center justify-between";
+                element.innerHTML = `<span>${q.options[index]}</span> <i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                score += 20;
+            } else {
+                element.className = "w-full text-left p-3.5 rounded-xl bg-rose-500/10 border-2 border-rose-500 text-xs sm:text-sm text-rose-300 font-medium flex items-center justify-between";
+                element.innerHTML = `<span>${q.options[index]}</span> <i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+
+                // Highlight correct one
+                allBtns[q.answer].className = "w-full text-left p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/50 text-xs sm:text-sm text-emerald-300 flex items-center justify-between";
+            }
+
+            // Show Feedback
+            const feedbackBox = document.getElementById('quiz-feedback');
+            feedbackBox.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackBox.className = "p-4 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-xs sm:text-sm";
+            } else {
+                feedbackBox.className = "p-4 rounded-xl border bg-rose-500/10 border-rose-500/30 text-rose-300 text-xs sm:text-sm";
+            }
+            feedbackBox.innerText = q.explanation;
+
+            document.getElementById('next-btn').disabled = false;
+            document.getElementById('quiz-score-live').innerText = `Skor Saat Ini: ${score}`;
+        }
+
+        function nextQuestion() {
+            currentQIndex++;
+            if (currentQIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function showFinalResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resultBox = document.getElementById('quiz-result');
+            resultBox.classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = `${score} / 100`;
+
+            const badgeTitle = document.getElementById('badge-title');
+            if (score === 100) {
+                badgeTitle.innerText = "🏆 Master OOP Senior";
+            } else if (score >= 60) {
+                badgeTitle.innerText = "⭐ OOP Practitioner";
+            } else {
+                badgeTitle.innerText = "📘 OOP Beginner";
+            }
+        }
+
+        function restartQuiz() {
+            currentQIndex = 0;
+            score = 0;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // ================= HELPER UTILITIES =================
+        function showToast(msg) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "bg-slate-800 border border-brand-500 text-white text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 pointer-events-auto transition-all transform translate-y-2 opacity-0";
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-brand-400"></i> ${msg}`;
+
+            toastContainer.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            // Animate Out & Remove
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            updatePlaygroundUI();
+            changeLang('js');
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
